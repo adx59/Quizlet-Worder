@@ -12,7 +12,10 @@ class QuizletWorder:
         self.word_entry = []
 
         self.root = Tk()
-        self.root_height = self.word_count*27 + 90
+        self.root_height = self.word_count*27+120
+
+        self.clist = None
+        self.new_term = None
 
         self.title_var = StringVar()
         self.term_count_var = StringVar()
@@ -87,6 +90,23 @@ class QuizletWorder:
         term_count_confirm = Button(term_count, text="Confirm", command=confirm_term_count)
         term_count_confirm.pack()
 
+    def add_term(self):
+        self.word_count += 1
+
+        text_var = StringVar()
+        word_input = Entry(self.root, textvariable=text_var)
+        word_input.grid(row=self.word_count+3, column=0, padx=22, pady=3)
+
+        self.word_entry.append((word_input, text_var))
+        
+        self.clist.grid(row=self.word_count+5, column=0)
+        self.new_term.grid(row=self.word_count+6, column=0)
+
+        self.root_height = self.word_count*27+120
+        self.root.geometry(f'175x{str(self.root_height)}')
+        self.root.update()
+
+
     def load_window(self):
         title_label = Label(self.root, text="Title of Set:")
         title_label.grid(row=0, column=0)
@@ -104,8 +124,11 @@ class QuizletWorder:
             word_input.grid(row=word+3, column=0, padx=22, pady=3)
             self.word_entry.append((word_input, text_var))
 
-        submit_button = Button(self.root, text='Make Quizlet List!', command=self.on_submit)
-        submit_button.grid(row=self.word_count+3, column=0, padx=22, pady=3)
+        self.clist = Button(self.root, text='Make Quizlet List!', command=self.on_submit)
+        self.clist.grid(row=self.word_count+3, column=0, padx=22, pady=3)
+
+        self.new_term = Button(self.root, text='Add Another Term', command=self.add_term)
+        self.new_term.grid(row=self.word_count+4, column=0, padx=22, pady=3)
 
         self.root.title('QW')
         self.root.geometry(f"175x{str(self.root_height)}")
